@@ -2,10 +2,11 @@
 #include "../include/point.h"
 #include "../include/game.h"
 #include "../include/direction.h"
+#include "../include/gate.h"
 
 using namespace std;
 
-Snake::Snake() {
+Snake::Snake(GateManager& gateManager) : gateManager(gateManager) {
     body.push_back(Point(10, 10));
     for (int i = 1; i < 4; ++i) {
         body.push_back(Point(10 - i, 10));
@@ -42,8 +43,8 @@ bool Snake::IsItem(Point p) {
 }
 
 bool Snake::IsGate(Point p) {
-    // Implement gate collision logic
-    return false;
+    return (p.x == gateManager.gateA.x && p.y == gateManager.gateA.y) || 
+           (p.x == gateManager.gateB.x && p.y == gateManager.gateB.y);
 }
 
 void Snake::Grow() {

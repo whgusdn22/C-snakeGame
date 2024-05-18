@@ -7,10 +7,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <curses.h>
-#include "direction.h"
-#include <unistd.h>
+#include "../include/direction.h"
 
-SnakeGame::SnakeGame() : gameMap(std::vector<std::string>(std::begin(map1), std::end(map1))) {
+SnakeGame::SnakeGame() : gameMap(std::vector<std::string>(std::begin(map1), std::end(map1))), snake(gateManager) {
     score = 0;
     maxLength = 0;
     growthCount = 0;
@@ -37,8 +36,6 @@ void SnakeGame::Initialize() {
 
     srand(time(0));
 
-    // Initialize snake
-    snake = Snake();
     // Spawn items and gates
     itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight());
     gateManager.SpawnGates(gameMap.getWidth(), gameMap.getHeight());
