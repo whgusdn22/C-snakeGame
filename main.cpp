@@ -359,7 +359,6 @@ void SnakeGame::Logic()
     // 100점마다 다음 맵으로 넘어감
     if (score >= 100)
     {
-        score -= 100;
         NextMap();
     }
 }
