@@ -1,9 +1,12 @@
+#include <vector>
+#include <string>
+
 #ifndef MAP1_H
 #define MAP1_H
 
-#include <string>
 using namespace std;
 
+<<<<<<< Updated upstream:map1.h
 string map1[] = {
     "211111111111111111112",
     "1                   1",
@@ -26,5 +29,31 @@ string map1[] = {
     "1                   1",
     "1                   1",
     "211111111111111111112"};
+=======
+vector<string> map1 =
+    {
+        "2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "1                                                           1",
+        "2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2"};
+>>>>>>> Stashed changes:include/map/map1.h
 
 #endif
