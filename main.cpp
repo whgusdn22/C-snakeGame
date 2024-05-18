@@ -178,18 +178,21 @@ void SnakeGame::NextMap()
     {
     case 1:
         map = map1;
+        mapSize = sizeof(map1) / sizeof(map1[0]);
         break;
     case 2:
         map = map2;
+        mapSize = sizeof(map2) / sizeof(map2[0]);
         break;
     case 3:
         map = map3;
+        mapSize = sizeof(map3) / sizeof(map3[0]);
         break;
     case 4:
         map = map4;
+        mapSize = sizeof(map4) / sizeof(map4[0]);
         break;
     }
-    mapSize = sizeof(*map) / sizeof(map[0]);
     Initialize();
 }
 
@@ -308,7 +311,7 @@ void SnakeGame::Logic()
         {
             if (snake[0].x == it->x && snake[0].y == it->y)
             {
-                score += 10;
+                score += 100;
                 growthCount++;
                 snake.push_back(Point());
                 it = growthItems.erase(it);
@@ -359,6 +362,7 @@ void SnakeGame::Logic()
     // 100점마다 다음 맵으로 넘어감
     if (score >= 100)
     {
+        score -= 100;
         NextMap();
     }
 }
