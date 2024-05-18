@@ -177,16 +177,16 @@ void SnakeGame::NextMap()
     switch (currentMap)
     {
     case 1:
-        map = map2;
+        map = map1;
         break;
     case 2:
-        map = map3;
+        map = map2;
         break;
     case 3:
-        map = map4;
+        map = map3;
         break;
     case 4:
-        map = map1;
+        map = map4;
         break;
     }
     mapSize = sizeof(*map) / sizeof(map[0]);
@@ -408,7 +408,54 @@ void SnakeGame::MoveThroughGate()
 
 Point SnakeGame::GetExitPoint(Point gate, Direction entryDir)
 {
-    vector<Direction> directions = {LEFT, UP, RIGHT, DOWN};
+    vector<Direction> directions;
+
+    // 가장자리 벽에 있는 경우
+    if (gate.y == 0)
+    {
+        return Point(gate.x, gate.y + 1); // 상단 벽 => 아래 방향
+    }
+    else if (gate.y == height - 1)
+    {
+        return Point(gate.x, gate.y - 1); // 하단 벽 => 위 방향
+    }
+    else if (gate.x == 0)
+    {
+        return Point(gate.x + 1, gate.y); // 좌측 벽 => 오른쪽 방향
+    }
+    else if (gate.x == width - 1)
+    {
+        return Point(gate.x - 1, gate.y); // 우측 벽 => 왼쪽 방향
+    }
+
+    // 가운데 벽에 있는 경우
+    directions.push_back(entryDir);
+    switch (entryDir)
+    {
+    case LEFT:
+        directions.push_back(UP);
+        directions.push_back(DOWN);
+        directions.push_back(RIGHT);
+        break;
+    case RIGHT:
+        directions.push_back(DOWN);
+        directions.push_back(UP);
+        directions.push_back(LEFT);
+        break;
+    case UP:
+        directions.push_back(LEFT);
+        directions.push_back(RIGHT);
+        directions.push_back(DOWN);
+        break;
+    case DOWN:
+        directions.push_back(RIGHT);
+        directions.push_back(LEFT);
+        directions.push_back(UP);
+        break;
+    default:
+        break;
+    }
+
     for (Direction d : directions)
     {
         int newX = gate.x;
@@ -435,7 +482,21 @@ Point SnakeGame::GetExitPoint(Point gate, Direction entryDir)
             return Point(newX, newY);
         }
     }
-    return gate;
+
+    // 모든 방향이 막힌 경우 진입 방향으로 진출
+    switch (entryDir)
+    {
+    case LEFT:
+        return Point(gate.x - 1, gate.y);
+    case RIGHT:
+        return Point(gate.x + 1, gate.y);
+    case UP:
+        return Point(gate.x, gate.y - 1);
+    case DOWN:
+        return Point(gate.x, gate.y + 1);
+    default:
+        return gate;
+    }
 }
 
 void SnakeGame::GameOver()
