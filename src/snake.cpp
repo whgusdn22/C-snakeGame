@@ -21,7 +21,7 @@ void Snake::Move(Direction dir) {  // Use Direction from direction.h
     case RIGHT: ++body[0].x; break;
     case UP: --body[0].y; break;
     case DOWN: ++body[0].y; break;
-    default: break;
+    default: ++body[0].x; break;
     }
     for (size_t i = 1; i < body.size(); ++i) {
         prev2 = body[i];

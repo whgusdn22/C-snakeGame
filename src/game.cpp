@@ -1,4 +1,4 @@
-#include "game.h"
+#include "../include/game.h"
 #include "../UI/scoreboard.h"
 #include "../include/map/map1.h"
 #include "../include/map/map2.h"
@@ -8,8 +8,13 @@
 #include <ctime>
 #include <curses.h>
 #include "../include/direction.h"
+#include <chrono>
 
-SnakeGame::SnakeGame() : gameMap(std::vector<std::string>(std::begin(map1), std::end(map1))), snake(gateManager) {
+SnakeGame::SnakeGame() 
+    : gameMap(std::vector<std::string>(std::begin(map1), std::end(map1))), 
+      gateManager(gameMap), 
+      snake(gateManager), // Initialize snake with gateManager
+      lastMoveTime(std::chrono::steady_clock::now()) { // Initialize lastMoveTime
     score = 0;
     maxLength = 0;
     growthCount = 0;
@@ -76,55 +81,61 @@ void SnakeGame::Input() {
 }
 
 void SnakeGame::Logic() {
-    snake.Move(dir);
+    auto now = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastMoveTime).count();
 
-    if (gameMap.IsWall(snake.GetHead()) || snake.IsCollision(snake.GetHead())) {
-        gameOver = true;
-    }
+    if (duration >= tick) {
+        snake.Move(dir);
+        lastMoveTime = now;
 
-    // Handle item collision
-    if (itemManager.IsItem(snake.GetHead())) {
-        if (itemManager.IsGrowthItem(snake.GetHead())) {
-            score += 50;
-            growthCount++;
-            snake.Grow();
-        } else {
-            score -= 10;
-            poisonCount++;
-            snake.Shrink();
-            if (snake.GetBody().size() < 3) {
-                gameOver = true;
-            }
+        if (gameMap.IsWall(snake.GetHead()) || snake.IsCollision(snake.GetHead())) {
+            gameOver = true;
         }
-        itemManager.RemoveItem(snake.GetHead());
-    }
 
-    if (snake.IsGate(snake.GetHead())) {
-        Point newHead = gateManager.GetOtherGate(snake.GetHead());
-        snake.SetHead(newHead);
-        gateCount++;
-        score += 20; // 게이트 사용 시 추가 점수
-    }
+        // Handle item collision
+        if (itemManager.IsItem(snake.GetHead())) {
+            if (itemManager.IsGrowthItem(snake.GetHead())) {
+                score += 50;
+                growthCount++;
+                snake.Grow();
+            } else {
+                score -= 10;
+                poisonCount++;
+                snake.Shrink();
+                if (snake.GetBody().size() < 3) {
+                    gameOver = true;
+                }
+            }
+            itemManager.RemoveItem(snake.GetHead());
+        }
 
-    // Update score and max length
-    if (snake.GetBody().size() > maxLength) {
-        maxLength = snake.GetBody().size();
-    }
+        if (snake.IsGate(snake.GetHead())) {
+            Point newHead = gateManager.GetOtherGate(snake.GetHead());
+            snake.SetHead(newHead);
+            gateCount++;
+            score += 20; // 게이트 사용 시 추가 점수
+        }
 
-    // Change map based on score
-    if (score >= 300) {
-        gameMap.ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
-    } else if (score >= 200) {
-        gameMap.ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
-    } else if (score >= 100) {
-        gameMap.ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
-    } else {
-        gameMap.ChangeMap(std::vector<std::string>(std::begin(map1), std::end(map1)));
-    }
+        // Update score and max length
+        if (snake.GetBody().size() > maxLength) {
+            maxLength = snake.GetBody().size();
+        }
 
-    // Respawn items if necessary
-    if (itemManager.ItemsDepleted()) {
-        itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight());
+        // Change map based on score
+        if (score >= 300) {
+            gameMap.ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
+        } else if (score >= 200) {
+            gameMap.ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
+        } else if (score >= 100) {
+            gameMap.ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
+        } else {
+            gameMap.ChangeMap(std::vector<std::string>(std::begin(map1), std::end(map1)));
+        }
+
+        // Respawn items if necessary
+        if (itemManager.ItemsDepleted()) {
+            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight());
+        }
     }
 }
 

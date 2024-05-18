@@ -1,13 +1,14 @@
 #include "../include/map.h"
 #include <curses.h>
 
-GameMap::GameMap(const std::vector<std::string>& mapData) : mapData(mapData), height(mapData.size()), width(mapData[0].length()) {}
+GameMap::GameMap(const std::vector<std::string>& mapData) : mapData(mapData) {
+    height = mapData.size();
+    width = mapData[0].size();
+}
 
-void GameMap::Draw() {
+void GameMap::Draw() const {
     for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            mvprintw(y + 1, x + 1, "%c", mapData[y][x]);
-        }
+    mvprintw(y + 1, 1, "%s", mapData[y].c_str());
     }
 }
 
@@ -18,7 +19,7 @@ bool GameMap::IsWall(Point p) {
 void GameMap::ChangeMap(const std::vector<std::string>& newMapData) {
     mapData = newMapData;
     height = mapData.size();
-    width = mapData[0].length();
+    width = mapData[0].size();
 }
 
 int GameMap::getWidth() const {
@@ -27,4 +28,8 @@ int GameMap::getWidth() const {
 
 int GameMap::getHeight() const {
     return height;
+}
+
+const std::vector<std::string>& GameMap::GetMap() const { // Implement GetMap function
+    return mapData;
 }

@@ -6,6 +6,7 @@
 #include "../include/map.h"
 #include "../include/snake.h"
 #include "../include/direction.h"
+#include <chrono>
 
 class SnakeGame {
 public:
@@ -31,6 +32,7 @@ private:
     bool gameOver;
     Direction dir;
     int tick;
+    std::chrono::steady_clock::time_point lastMoveTime; // Add this line
 };
 
-#endif
+#endif // GAME_H
