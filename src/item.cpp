@@ -23,8 +23,26 @@ bool ItemManager::IsItem(Point p) {
     return false;
 }
 
+bool ItemManager::IsGrowthItem(Point p) {
+    for (const auto& item : growthItems) {
+        if (item.x == p.x && item.y == p.y) return true;
+    }
+    return false;
+}
+
 void ItemManager::RemoveItem(Point p) {
-    // Implement item removal logic
+    for (auto it = growthItems.begin(); it != growthItems.end(); ++it) {
+        if (it->x == p.x && it->y == p.y) {
+            growthItems.erase(it);
+            return;
+        }
+    }
+    for (auto it = poisonItems.begin(); it != poisonItems.end(); ++it) {
+        if (it->x == p.x && it->y == p.y) {
+            poisonItems.erase(it);
+            return;
+        }
+    }
 }
 
 void ItemManager::Draw() {
@@ -34,4 +52,8 @@ void ItemManager::Draw() {
     for (const auto& item : poisonItems) {
         mvprintw(item.y + 1, item.x + 1, "P");
     }
+}
+
+bool ItemManager::ItemsDepleted() {
+    return growthItems.empty() || poisonItems.empty();
 }

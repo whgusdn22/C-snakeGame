@@ -1,11 +1,16 @@
 #include "game.h"
 #include "../UI/scoreboard.h"
+#include "../include/map/map1.h"
+#include "../include/map/map2.h"
+#include "../include/map/map3.h"
+#include "../include/map/map4.h"
 #include <cstdlib>
 #include <ctime>
 #include <curses.h>
-#include "../include/direction.h"
+#include "direction.h"
+#include <unistd.h>
 
-SnakeGame::SnakeGame() : gameMap(21, 21) {
+SnakeGame::SnakeGame() : gameMap(std::vector<std::string>(std::begin(map1), std::end(map1))) {
     score = 0;
     maxLength = 0;
     growthCount = 0;
@@ -13,7 +18,7 @@ SnakeGame::SnakeGame() : gameMap(21, 21) {
     gateCount = 0;
     gameOver = false;
     dir = STOP;
-    tick = 100; // ms
+    tick = 500; // ms
     Initialize();
 }
 
@@ -35,8 +40,8 @@ void SnakeGame::Initialize() {
     // Initialize snake
     snake = Snake();
     // Spawn items and gates
-    itemManager.SpawnItems(gameMap.width, gameMap.height);
-    gateManager.SpawnGates(gameMap.width, gameMap.height);
+    itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight());
+    gateManager.SpawnGates(gameMap.getWidth(), gameMap.getHeight());
 }
 
 void SnakeGame::Draw() {
@@ -48,7 +53,7 @@ void SnakeGame::Draw() {
     for (size_t i = 0; i < snakeBody.size(); ++i) {
         mvprintw(snakeBody[i].y + 1, snakeBody[i].x + 1, i == 0 ? "@" : "o");
     }
-    DrawScoreBoard(score, snakeBody.size(), maxLength, growthCount, poisonCount, gateCount, gameMap.width);
+    DrawScoreBoard(score, snakeBody.size(), maxLength, growthCount, poisonCount, gateCount, gameMap.getWidth());
     refresh();
 }
 
@@ -80,14 +85,28 @@ void SnakeGame::Logic() {
         gameOver = true;
     }
 
-    if (snake.IsItem(snake.GetHead())) {
-        // Handle item logic
+    // Handle item collision
+    if (itemManager.IsItem(snake.GetHead())) {
+        if (itemManager.IsGrowthItem(snake.GetHead())) {
+            score += 50;
+            growthCount++;
+            snake.Grow();
+        } else {
+            score -= 10;
+            poisonCount++;
+            snake.Shrink();
+            if (snake.GetBody().size() < 3) {
+                gameOver = true;
+            }
+        }
+        itemManager.RemoveItem(snake.GetHead());
     }
 
     if (snake.IsGate(snake.GetHead())) {
         Point newHead = gateManager.GetOtherGate(snake.GetHead());
         snake.SetHead(newHead);
         gateCount++;
+        score += 20; // 게이트 사용 시 추가 점수
     }
 
     // Update score and max length
@@ -95,10 +114,21 @@ void SnakeGame::Logic() {
         maxLength = snake.GetBody().size();
     }
 
+    // Change map based on score
+    if (score >= 300) {
+        gameMap.ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
+    } else if (score >= 200) {
+        gameMap.ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
+    } else if (score >= 100) {
+        gameMap.ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
+    } else {
+        gameMap.ChangeMap(std::vector<std::string>(std::begin(map1), std::end(map1)));
+    }
+
     // Respawn items if necessary
-    // if (itemManager.ItemsDepleted()) {
-    //     itemManager.SpawnItems(gameMap.width, gameMap.height);
-    // }
+    if (itemManager.ItemsDepleted()) {
+        itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight());
+    }
 }
 
 void SnakeGame::Run() {
@@ -107,7 +137,7 @@ void SnakeGame::Run() {
         Input();
         Logic();
     }
-    mvprintw(gameMap.height / 2, (gameMap.width - 9) / 2, "Game Over");
+    mvprintw(gameMap.getHeight() / 2, (gameMap.getWidth() - 9) / 2, "Game Over");
     refresh();
     getch();
 }
