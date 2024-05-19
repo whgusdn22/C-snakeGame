@@ -7,18 +7,22 @@
 #include "../include/snake.h"
 #include "../include/direction.h"
 #include <chrono>
+#include <vector>
 
-class SnakeGame {
+class SnakeGame
+{
 public:
     SnakeGame();
     ~SnakeGame();
     void Run();
+    std::vector<int> scores = {0};
 
 private:
     void Initialize();
     void Draw();
     void Input();
     void Logic();
+    void MoveCenter();
 
     Snake snake;
     ItemManager itemManager;

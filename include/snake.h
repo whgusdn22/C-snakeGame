@@ -8,10 +8,10 @@
 
 using namespace std;
 
-
-class Snake {
+class Snake
+{
 public:
-    Snake(GateManager& gateManager);
+    Snake(GateManager &gateManager);
     void Move(Direction dir);
     bool IsCollision(Point p);
     bool IsItem(Point p);
@@ -19,13 +19,11 @@ public:
     void Grow();
     void Shrink();
     Point GetHead() const;
-    const vector<Point>& GetBody() const;
+    const vector<Point> &GetBody() const;
     void SetHead(Point newHead);
 
-private:
     vector<Point> body;
-    GateManager& gateManager;
-
+    GateManager &gateManager;
 };
 
 #endif
