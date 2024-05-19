@@ -7,15 +7,12 @@
 #include "../include/snake.h"
 #include "../include/direction.h"
 #include <chrono>
-#include <vector>
 
-class SnakeGame
-{
+class SnakeGame {
 public:
     SnakeGame();
     ~SnakeGame();
     void Run();
-    std::vector<int> scores;
 
 private:
     void Initialize();
