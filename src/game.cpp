@@ -33,8 +33,8 @@ SnakeGame::SnakeGame()
     poisonCount = 0;
     gateCount = 0;
     gameOver = false;
-    dir = STOP;
-    tick = 300; // ms
+    dir = RIGHT;
+    tick = 200; // ms
     Initialize();
 }
 
