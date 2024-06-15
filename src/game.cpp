@@ -195,23 +195,19 @@ void SnakeGame::Logic()
             SnakeGame::scores.push_back(score);
             if ((score / 100) % 4 == 1)
             {
-                SnakeGame::MoveCenter();
-                gameMap.ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
+                ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
             }
             else if ((score / 100) % 4 == 2)
             {
-                SnakeGame::MoveCenter();
-                gameMap.ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
+                ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
             }
             else if ((score / 100) % 4 == 3)
             {
-                SnakeGame::MoveCenter();
-                gameMap.ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
+                ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
             }
             else if ((score / 100) % 4 == 0)
             {
-                SnakeGame::MoveCenter();
-                gameMap.ChangeMap(std::vector<std::string>(std::begin(map1), std::end(map1)));
+                ChangeMap(std::vector<std::string>(std::begin(map1), std::end(map1)));
             }
         }
 
@@ -221,6 +217,14 @@ void SnakeGame::Logic()
             itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
         }
     }
+}
+
+void SnakeGame::ChangeMap(const std::vector<std::string>& newMap)
+{
+    gameMap.ChangeMap(newMap);
+    itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
+    gateManager.SpawnGates(gameMap.getWidth(), gameMap.getHeight());
+    MoveCenter();
 }
 
 void SnakeGame::Run()

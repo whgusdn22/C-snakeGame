@@ -23,6 +23,7 @@ private:
     void Input();
     void Logic();
     void MoveCenter();
+    void ChangeMap(const std::vector<std::string>& newMap);
 
     Snake snake;
     ItemManager itemManager;
