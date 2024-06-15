@@ -16,9 +16,33 @@ void SnakeGame::MoveCenter()
     snake.body.clear(); // snake vector를 {}로 초기화시킴
 
     snake.body.push_back(Point(midx, midy)); // snake vector에 맵 가운데 좌표를 넣어줌
-    for (int i = 1; i < 4; ++i)
+    if (dir == LEFT)
     {
-        snake.body.push_back(Point(midx - i, midy));
+        for (int i = 1; i < 4; ++i)
+        {
+            snake.body.push_back(Point(midx + i, midy));
+        }
+    }
+    else if (dir == UP)
+    {
+        for (int i = 1; i < 4; ++i)
+        {
+            snake.body.push_back(Point(midx, midy + i));
+        }
+    }
+    else if (dir == DOWN)
+    {
+        for (int i = 1; i < 4; ++i)
+        {
+            snake.body.push_back(Point(midx, midy - i));
+        }
+    }
+    else
+    {
+        for (int i = 1; i < 4; ++i)
+        {
+            snake.body.push_back(Point(midx - i, midy));
+        }
     }
 }
 SnakeGame::SnakeGame()
