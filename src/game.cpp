@@ -56,7 +56,7 @@ void SnakeGame::Initialize()
     srand(time(0));
 
     // Spawn items and gates
-    itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight());
+    itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
     gateManager.SpawnGates(gameMap.getWidth(), gameMap.getHeight());
 }
 
@@ -189,7 +189,7 @@ void SnakeGame::Logic()
         // Respawn items if necessary
         if (itemManager.ItemsDepleted())
         {
-            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight());
+            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
         }
     }
 }

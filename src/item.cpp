@@ -1,16 +1,28 @@
 #include "../include/item.h"
 #include <cstdlib>
 #include <curses.h>
+#include "map.h"
 
-void ItemManager::SpawnItems(int width, int height)
-{
+
+void ItemManager::SpawnItems(int width, int height, const GameMap& gameMap) {
     growthItems.clear();
     poisonItems.clear();
-    for (int i = 0; i < 3; ++i)
-    {
-        Point growth(rand() % width, rand() % height);
+
+    auto is_valid_position = [&gameMap](Point p) {
+        char cell = gameMap.GetMap()[p.y][p.x];
+        return cell != '1' && cell != '2';
+    };
+
+    for (int i = 0; i < 3; ++i) {
+        Point growth, poison;
+        do {
+            growth = Point(rand() % width, rand() % height);
+        } while (!is_valid_position(growth));
         growthItems.push_back(growth);
-        Point poison(rand() % width, rand() % height);
+
+        do {
+            poison = Point(rand() % width, rand() % height);
+        } while (!is_valid_position(poison));
         poisonItems.push_back(poison);
     }
 }
