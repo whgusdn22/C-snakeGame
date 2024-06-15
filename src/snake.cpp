@@ -94,3 +94,14 @@ void Snake::SetHead(Point newHead)
 {
     body[0] = newHead;
 }
+
+void Snake::HandleGate(Direction& dir)
+{
+    if (IsGate(GetHead())) {
+        Point newHead = gateManager.GetOtherGate(GetHead(), dir);
+        SetHead(newHead);
+        if (body.size() > 1) {
+            body[1] = newHead; // 두 번째 몸통을 새 머리 위치로 설정
+        }
+    }
+}

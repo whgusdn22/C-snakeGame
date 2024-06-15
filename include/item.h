@@ -5,7 +5,7 @@
 #include "../include/point.h"
 #include "map.h"
 
-class ItemManager
+class ItemManager 
 {
 public:
     void SpawnItems(int width, int height, const GameMap &gameMap);

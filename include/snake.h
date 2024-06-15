@@ -21,9 +21,11 @@ public:
     Point GetHead() const;
     const vector<Point> &GetBody() const;
     void SetHead(Point newHead);
+    void HandleGate(Direction& dir);
 
     vector<Point> body;
     GateManager &gateManager;
+    bool growth = false;
 };
 
 #endif

@@ -7,15 +7,10 @@ void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap)
 {
     growthItems.clear();
     poisonItems.clear();
+
     auto is_valid_position = [&gameMap](Point p)
     {
         char cell = gameMap.GetMap()[p.y][p.x];
-        // bool notInSnake = true;
-        // // if (cell = snake.GetHead());
-        // // for(int i=0;i<snake.GetBody().size()){
-
-        // // }
-        // return cell != '1' && cell != '2';
         return cell == ' ';
     };
 
