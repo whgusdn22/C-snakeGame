@@ -55,11 +55,6 @@ bool Snake::IsCollision(Point p)
     return false;
 }
 
-bool Snake::IsItem(Point p)
-{
-    // Implement item collision logic
-    return false;
-}
 
 bool Snake::IsGate(Point p)
 {

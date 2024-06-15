@@ -54,7 +54,7 @@ SnakeGame::SnakeGame()
       snake(gateManager), // Initialize snake with gateManager
       lastMoveTime(std::chrono::steady_clock::now()),
       currentStage(1) // Initialize currentStage
-{ // Initialize lastMoveTime
+{                     // Initialize lastMoveTime
     score = 0;
     maxLength = 0;
     growthCount = 0;
@@ -146,23 +146,33 @@ void SnakeGame::Draw()
 
 void SnakeGame::Input()
 {
+    auto Body = snake.GetBody();
+    Direction nowDir;
+    if (snake.GetHead() + Point(1, 0) == Body[1])
+        nowDir = LEFT;
+    else if (snake.GetHead() + Point(-1, 0) == Body[1])
+        nowDir = RIGHT;
+    else if (snake.GetHead() + Point(0, -1) == Body[1])
+        nowDir = UP;
+    else if (snake.GetHead() + Point(0, 1) != Body[1])
+        nowDir = DOWN;
     int ch = getch();
     switch (ch)
     {
     case KEY_LEFT:
-        if (dir != RIGHT)
+        if (dir != RIGHT && nowDir != RIGHT)
             dir = LEFT;
         break;
     case KEY_RIGHT:
-        if (dir != LEFT)
+        if (dir != LEFT && nowDir != LEFT)
             dir = RIGHT;
         break;
     case KEY_UP:
-        if (dir != DOWN)
+        if (dir != DOWN && nowDir != DOWN)
             dir = UP;
         break;
     case KEY_DOWN:
-        if (dir != UP)
+        if (dir != UP && nowDir != UP)
             dir = DOWN;
         break;
     case 'q':
@@ -223,9 +233,12 @@ void SnakeGame::Logic()
             dir = newDir; // 새로운 방향 설정
 
             // 충돌 검사
-            if ((gameMap.IsWall(snake.GetHead()) && !gateManager.IsGatePosition(snake.GetHead())) || snake.IsCollision(snake.GetHead())) {
+            if ((gameMap.IsWall(snake.GetHead()) && !gateManager.IsGatePosition(snake.GetHead())) || snake.IsCollision(snake.GetHead()))
+            {
                 gameOver = true;
-            } else {
+            }
+            else
+            {
                 gateCount++;
                 score += 20; // 게이트 사용 시 추가 점수
             }
@@ -275,7 +288,7 @@ void SnakeGame::Logic()
     }
 }
 
-void SnakeGame::ChangeMap(const std::vector<std::string>& newMap)
+void SnakeGame::ChangeMap(const std::vector<std::string> &newMap)
 {
     gameMap.ChangeMap(newMap);
     itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
