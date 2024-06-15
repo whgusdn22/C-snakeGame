@@ -52,7 +52,8 @@ SnakeGame::SnakeGame()
     : gameMap(std::vector<std::string>(std::begin(map1), std::end(map1))),
       gateManager(gameMap),
       snake(gateManager), // Initialize snake with gateManager
-      lastMoveTime(std::chrono::steady_clock::now())
+      lastMoveTime(std::chrono::steady_clock::now()),
+      currentStage(1) // Initialize currentStage
 { // Initialize lastMoveTime
     score = 0;
     maxLength = 0;
@@ -98,7 +99,22 @@ void SnakeGame::Draw()
     {
         mvprintw(snakeBody[i].y + 1, snakeBody[i].x + 1, i == 0 ? "@" : "o");
     }
-    DrawScoreBoard(score, snakeBody.size(), maxLength, growthCount, poisonCount, gateCount, gameMap.getWidth());
+
+    // Draw Score Board
+    mvprintw(0, gameMap.getWidth() + 2, "Score Board");
+    mvprintw(1, gameMap.getWidth() + 2, "B: (%d) / (%d)", snakeBody.size(), maxLength);
+    mvprintw(2, gameMap.getWidth() + 2, "+: %d", growthCount);
+    mvprintw(3, gameMap.getWidth() + 2, "-: %d", poisonCount);
+    mvprintw(4, gameMap.getWidth() + 2, "G: %d", gateCount);
+
+    // Draw Mission
+    int missionLength = 10; // Example mission length, you can adjust as needed
+    mvprintw(6, gameMap.getWidth() + 2, "Mission");
+    mvprintw(7, gameMap.getWidth() + 2, "B: %d (%s)", missionLength, maxLength >= missionLength ? "v" : " ");
+    mvprintw(8, gameMap.getWidth() + 2, "+: 5 (%s)", growthCount >= 5 ? "v" : " ");
+    mvprintw(9, gameMap.getWidth() + 2, "-: 2 (%s)", poisonCount >= 2 ? "v" : " ");
+    mvprintw(10, gameMap.getWidth() + 2, "G: 1 (%s)", gateCount >= 1 ? "v" : " ");
+
     refresh();
 }
 
@@ -127,6 +143,12 @@ void SnakeGame::Input()
         gameOver = true;
         break;
     }
+}
+
+bool SnakeGame::CheckMissionComplete()
+{
+    int missionLength = 10; // Example mission length, you can adjust as needed
+    return (maxLength >= missionLength && growthCount >= 5 && poisonCount >= 2 && gateCount >= 1);
 }
 
 void SnakeGame::Logic()
@@ -189,26 +211,33 @@ void SnakeGame::Logic()
             maxLength = snake.GetBody().size();
         }
 
-        // Change map based on score
-        if (score % 100 == 0 && score != SnakeGame::scores.back())
+        // Check if all missions are completed
+        if (CheckMissionComplete())
         {
-            SnakeGame::scores.push_back(score);
-            if ((score / 100) % 4 == 1)
-            {
-                ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
-            }
-            else if ((score / 100) % 4 == 2)
-            {
-                ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
-            }
-            else if ((score / 100) % 4 == 3)
-            {
-                ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
-            }
-            else if ((score / 100) % 4 == 0)
-            {
-                ChangeMap(std::vector<std::string>(std::begin(map1), std::end(map1)));
-            }
+            mvprintw(gameMap.getHeight() / 2, (gameMap.getWidth() - 3) / 2, "Win");
+            refresh();
+            getch();
+            gameOver = true;
+        }
+
+        // Change map based on score
+        if (score >= 100 && currentStage == 1)
+        {
+            currentStage = 2;
+            tick -= 20;
+            ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
+        }
+        else if (score >= 200 && currentStage == 2)
+        {
+            currentStage = 3;
+            tick -= 10;
+            ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
+        }
+        else if (score >= 300 && currentStage == 3)
+        {
+            currentStage = 4;
+            tick -= 10;
+            ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
         }
 
         // Respawn items if necessary
@@ -235,7 +264,9 @@ void SnakeGame::Run()
         Input();
         Logic();
     }
+    if (!CheckMissionComplete()){
     mvprintw(gameMap.getHeight() / 2, (gameMap.getWidth() - 9) / 2, "Game Over");
+    }
     refresh();
     getch();
 }
