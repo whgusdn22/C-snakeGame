@@ -4,18 +4,21 @@
 #include "map.h"
 
 
-void ItemManager::SpawnItems(int width, int height, const GameMap& gameMap) {
+void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap) {
     growthItems.clear();
     poisonItems.clear();
 
-    auto is_valid_position = [&gameMap](Point p) {
+    auto is_valid_position = [&gameMap](Point p) 
+    {
         char cell = gameMap.GetMap()[p.y][p.x];
-        return cell != '1' && cell != '2';
+        return cell == ' ';
     };
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; ++i) 
+    {
         Point growth, poison;
-        do {
+        do 
+        {
             growth = Point(rand() % width, rand() % height);
         } while (!is_valid_position(growth));
         growthItems.push_back(growth);
