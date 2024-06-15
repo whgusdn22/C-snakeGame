@@ -100,20 +100,46 @@ void SnakeGame::Draw()
         mvprintw(snakeBody[i].y + 1, snakeBody[i].x + 1, i == 0 ? "@" : "o");
     }
 
-    // Draw Score Board
-    mvprintw(0, gameMap.getWidth() + 2, "Score Board");
-    mvprintw(1, gameMap.getWidth() + 2, "B: (%d) / (%d)", snakeBody.size(), maxLength);
-    mvprintw(2, gameMap.getWidth() + 2, "+: %d", growthCount);
-    mvprintw(3, gameMap.getWidth() + 2, "-: %d", poisonCount);
-    mvprintw(4, gameMap.getWidth() + 2, "G: %d", gateCount);
+    // Draw Score Board box
+    int boxWidth = 20;
+    int boxHeight = 8;
+    int startX = gameMap.getWidth() + 2;
+    int startY = 0;
+    mvprintw(startY, startX, "+------------------+");
+    for (int i = 1; i <= boxHeight; ++i)
+    {
+        mvprintw(startY + i, startX, "|");
+        mvprintw(startY + i, startX + boxWidth - 1, "|");
+    }
+    mvprintw(startY + boxHeight + 1, startX, "+------------------+");
 
-    // Draw Mission
+    // Draw Score Board text inside the box
+    mvprintw(startY + 1, startX + 2, "Score Board");
+    mvprintw(startY + 2, startX + 2, "B: (%d) / (%d)", snakeBody.size(), maxLength);
+    mvprintw(startY + 3, startX + 2, "+: %d", growthCount);
+    mvprintw(startY + 4, startX + 2, "-: %d", poisonCount);
+    mvprintw(startY + 5, startX + 2, "G: %d", gateCount);
+
+    // Draw Mission box
+    int missionBoxWidth = 20;
+    int missionBoxHeight = 6;
+    int missionStartX = gameMap.getWidth() + 2;
+    int missionStartY = boxHeight + 3;
+    mvprintw(missionStartY, missionStartX, "+------------------+");
+    for (int i = 1; i <= missionBoxHeight; ++i)
+    {
+        mvprintw(missionStartY + i, missionStartX, "|");
+        mvprintw(missionStartY + i, missionStartX + missionBoxWidth - 1, "|");
+    }
+    mvprintw(missionStartY + missionBoxHeight + 1, missionStartX, "+------------------+");
+
+    // Draw Mission text inside the box
     int missionLength = 10; // Example mission length, you can adjust as needed
-    mvprintw(6, gameMap.getWidth() + 2, "Mission");
-    mvprintw(7, gameMap.getWidth() + 2, "B: %d (%s)", missionLength, maxLength >= missionLength ? "v" : " ");
-    mvprintw(8, gameMap.getWidth() + 2, "+: 5 (%s)", growthCount >= 5 ? "v" : " ");
-    mvprintw(9, gameMap.getWidth() + 2, "-: 2 (%s)", poisonCount >= 2 ? "v" : " ");
-    mvprintw(10, gameMap.getWidth() + 2, "G: 1 (%s)", gateCount >= 1 ? "v" : " ");
+    mvprintw(missionStartY + 1, missionStartX + 2, "Mission");
+    mvprintw(missionStartY + 2, missionStartX + 2, "B: %d (%s)", missionLength, maxLength >= missionLength ? "v" : " ");
+    mvprintw(missionStartY + 3, missionStartX + 2, "+: 5 (%s)", growthCount >= 5 ? "v" : " ");
+    mvprintw(missionStartY + 4, missionStartX + 2, "-: 2 (%s)", poisonCount >= 2 ? "v" : " ");
+    mvprintw(missionStartY + 5, missionStartX + 2, "G: 1 (%s)", gateCount >= 1 ? "v" : " ");
 
     refresh();
 }
@@ -218,6 +244,7 @@ void SnakeGame::Logic()
             refresh();
             getch();
             gameOver = true;
+            return;
         }
 
         // Change map based on score
@@ -236,7 +263,7 @@ void SnakeGame::Logic()
         else if (score >= 300 && currentStage == 3)
         {
             currentStage = 4;
-            tick -= 10;
+            tick -= 20;
             ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
         }
 
@@ -264,9 +291,10 @@ void SnakeGame::Run()
         Input();
         Logic();
     }
-    if (!CheckMissionComplete()){
-    mvprintw(gameMap.getHeight() / 2, (gameMap.getWidth() - 9) / 2, "Game Over");
+    if (!CheckMissionComplete())
+    {
+        mvprintw(gameMap.getHeight() / 2, (gameMap.getWidth() - 9) / 2, "Game Over");
+        refresh();
+        getch();
     }
-    refresh();
-    getch();
 }
