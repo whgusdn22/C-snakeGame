@@ -16,9 +16,33 @@ void SnakeGame::MoveCenter()
     snake.body.clear(); // snake vector를 {}로 초기화시킴
 
     snake.body.push_back(Point(midx, midy)); // snake vector에 맵 가운데 좌표를 넣어줌
-    for (int i = 1; i < 4; ++i)
+    if (dir == LEFT)
     {
-        snake.body.push_back(Point(midx - i, midy));
+        for (int i = 1; i < 4; ++i)
+        {
+            snake.body.push_back(Point(midx + i, midy));
+        }
+    }
+    else if (dir == UP)
+    {
+        for (int i = 1; i < 4; ++i)
+        {
+            snake.body.push_back(Point(midx, midy + i));
+        }
+    }
+    else if (dir == DOWN)
+    {
+        for (int i = 1; i < 4; ++i)
+        {
+            snake.body.push_back(Point(midx, midy - i));
+        }
+    }
+    else
+    {
+        for (int i = 1; i < 4; ++i)
+        {
+            snake.body.push_back(Point(midx - i, midy));
+        }
     }
 }
 SnakeGame::SnakeGame()
@@ -141,8 +165,10 @@ void SnakeGame::Logic()
 
         if (snake.IsGate(snake.GetHead()))
         {
-            Point newHead = gateManager.GetOtherGate(snake.GetHead());
+            Direction newDir = dir;
+            Point newHead = gateManager.GetOtherGate(snake.GetHead(), newDir);
             snake.SetHead(newHead);
+            dir = newDir; // 새로운 방향 설정
             gateCount++;
             score += 20; // 게이트 사용 시 추가 점수
         }

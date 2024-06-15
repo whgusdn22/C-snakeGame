@@ -30,10 +30,26 @@ bool GateManager::IsGate(Point p) {
     return (p.x == gateA.x && p.y == gateA.y) || (p.x == gateB.x && p.y == gateB.y);
 }
 
-Point GateManager::GetOtherGate(Point p) {
+Point GateManager::GetOtherGate(Point p, Direction& newDir) {
     if (p.x == gateA.x && p.y == gateA.y) {
+        // 반대 방향 설정
+        switch (newDir) {
+            case LEFT: newDir = RIGHT; break;
+            case RIGHT: newDir = LEFT; break;
+            case UP: newDir = DOWN; break;
+            case DOWN: newDir = UP; break;
+            default: break;
+        }
         return gateB;
     } else {
+        // 반대 방향 설정
+        switch (newDir) {
+            case LEFT: newDir = RIGHT; break;
+            case RIGHT: newDir = LEFT; break;
+            case UP: newDir = DOWN; break;
+            case DOWN: newDir = UP; break;
+            default: break;
+        }
         return gateA;
     }
 }

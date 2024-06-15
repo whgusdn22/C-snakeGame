@@ -94,3 +94,11 @@ void Snake::SetHead(Point newHead)
 {
     body[0] = newHead;
 }
+
+void Snake::HandleGate(Direction& dir)
+{
+    if (IsGate(GetHead())) {
+        Point newHead = gateManager.GetOtherGate(GetHead(), dir);
+        SetHead(newHead);
+    }
+}
