@@ -30,28 +30,54 @@ bool GateManager::IsGate(Point p) {
     return (p.x == gateA.x && p.y == gateA.y) || (p.x == gateB.x && p.y == gateB.y);
 }
 
+bool GateManager::IsGatePosition(Point p) {
+    return (p.x == gateA.x && p.y == gateA.y) || (p.x == gateB.x && p.y == gateB.y);
+}
+
 Point GateManager::GetOtherGate(Point p, Direction& newDir) {
-    if (p.x == gateA.x && p.y == gateA.y) {
-        // 반대 방향 설정
-        switch (newDir) {
-            case LEFT: newDir = RIGHT; break;
-            case RIGHT: newDir = LEFT; break;
-            case UP: newDir = DOWN; break;
-            case DOWN: newDir = UP; break;
-            default: break;
+    Point otherGate = (p.x == gateA.x && p.y == gateA.y) ? gateB : gateA;
+
+    int mapHeight = gameMap.getHeight();
+    int mapWidth = gameMap.getWidth();
+
+    // 게이트 위치와 현재 방향에 따라 새로운 방향 설정
+    if (otherGate.y == 0) { // 나오는 게이트가 최상단에 있을 경우
+        newDir = DOWN;
+    } else if (otherGate.y == mapHeight - 1) { // 나오는 게이트가 최하단에 있을 경우
+        newDir = UP;
+    } else if (otherGate.x == 0) { // 나오는 게이트가 가장 왼쪽에 있을 경우
+        newDir = RIGHT;
+    } else if (otherGate.x == mapWidth - 1) { // 나오는 게이트가 가장 오른쪽에 있을 경우
+        newDir = LEFT;
+    } else if (gateA.y == gateB.y) { // 게이트가 같은 y 좌표에 있을 경우
+        if (p.x < otherGate.x) {
+            newDir = RIGHT;
+        } else {
+            newDir = LEFT;
         }
-        return gateB;
-    } else {
-        // 반대 방향 설정
-        switch (newDir) {
-            case LEFT: newDir = RIGHT; break;
-            case RIGHT: newDir = LEFT; break;
-            case UP: newDir = DOWN; break;
-            case DOWN: newDir = UP; break;
-            default: break;
+    } else if (gateA.x == gateB.x) { // 게이트가 같은 x 좌표에 있을 경우
+        if (p.y < otherGate.y) {
+            newDir = DOWN;
+        } else {
+            newDir = UP;
         }
-        return gateA;
+    } else { // 게이트가 서로 다른 x, y 좌표에 있을 경우
+        if (abs(p.x - otherGate.x) > abs(p.y - otherGate.y)) {
+            if (p.x < otherGate.x) {
+                newDir = RIGHT;
+            } else {
+                newDir = LEFT;
+            }
+        } else {
+            if (p.y < otherGate.y) {
+                newDir = DOWN;
+            } else {
+                newDir = UP;
+            }
+        }
     }
+
+    return otherGate;
 }
 
 void GateManager::Draw() {

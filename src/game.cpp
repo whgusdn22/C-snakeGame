@@ -9,8 +9,10 @@
 #include <curses.h>
 #include "../include/direction.h"
 #include <chrono>
+
 const int midx = 61 / 2;
 const int midy = 22 / 2;
+
 void SnakeGame::MoveCenter()
 {
     snake.body.clear(); // snake vector를 {}로 초기화시킴
@@ -45,6 +47,7 @@ void SnakeGame::MoveCenter()
         }
     }
 }
+
 SnakeGame::SnakeGame()
     : gameMap(std::vector<std::string>(std::begin(map1), std::end(map1))),
       gateManager(gameMap),
@@ -136,7 +139,7 @@ void SnakeGame::Logic()
         snake.Move(dir);
         lastMoveTime = now;
 
-        if (gameMap.IsWall(snake.GetHead()) || snake.IsCollision(snake.GetHead()))
+        if ((gameMap.IsWall(snake.GetHead()) && !gateManager.IsGatePosition(snake.GetHead())) || snake.IsCollision(snake.GetHead()))
         {
             gameOver = true;
         }
@@ -163,14 +166,21 @@ void SnakeGame::Logic()
             itemManager.RemoveItem(snake.GetHead());
         }
 
+        // Handle gate collision and set new direction
         if (snake.IsGate(snake.GetHead()))
         {
             Direction newDir = dir;
             Point newHead = gateManager.GetOtherGate(snake.GetHead(), newDir);
             snake.SetHead(newHead);
             dir = newDir; // 새로운 방향 설정
-            gateCount++;
-            score += 20; // 게이트 사용 시 추가 점수
+
+            // 충돌 검사
+            if ((gameMap.IsWall(snake.GetHead()) && !gateManager.IsGatePosition(snake.GetHead())) || snake.IsCollision(snake.GetHead())) {
+                gameOver = true;
+            } else {
+                gateCount++;
+                score += 20; // 게이트 사용 시 추가 점수
+            }
         }
 
         // Update score and max length
@@ -180,18 +190,11 @@ void SnakeGame::Logic()
         }
 
         // Change map based on score
-        if (score % 100 == 0 and score != SnakeGame::scores.back())
+        if (score % 100 == 0 && score != SnakeGame::scores.back())
         {
             SnakeGame::scores.push_back(score);
             if ((score / 100) % 4 == 1)
             {
-                // snake.body.clear();
-
-                // snake.body.push_back(Point(midx, midy));
-                // for (int i = 1; i < 4; ++i)
-                // {
-                //     snake.body.push_back(Point(midx - i, midy));
-                // }
                 SnakeGame::MoveCenter();
                 gameMap.ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
             }

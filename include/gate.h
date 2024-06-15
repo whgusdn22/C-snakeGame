@@ -10,6 +10,7 @@ public:
     GateManager(GameMap& gameMap) : gameMap(gameMap) {} // Constructor to accept GameMap reference
     void SpawnGates(int width, int height);
     bool IsGate(Point p);
+    bool IsGatePosition(Point p); // 추가
     Point GetOtherGate(Point p, Direction& newDir);
     void Draw();
     Point gateA;
