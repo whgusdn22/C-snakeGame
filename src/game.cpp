@@ -104,7 +104,7 @@ void SnakeGame::Draw()
     int boxWidth = 20;
     int boxHeight = 8;
     int startX = gameMap.getWidth() + 2;
-    int startY = 0;
+    int startY = 1;
     mvprintw(startY, startX, "+------------------+");
     for (int i = 1; i <= boxHeight; ++i)
     {
