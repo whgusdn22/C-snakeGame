@@ -24,7 +24,7 @@ private:
     void Logic();
     void MoveCenter();
     void ChangeMap(const std::vector<std::string>& newMap);
-    bool CheckMissionComplete(); // Add this line
+    bool CheckMissionComplete();
 
     Snake snake;
     ItemManager itemManager;
@@ -38,8 +38,9 @@ private:
     bool gameOver;
     Direction dir;
     int tick;
-    int currentStage; // Add this line to track the current stage
-    std::chrono::steady_clock::time_point lastMoveTime; // Add this line
+    int currentStage;
+    std::chrono::steady_clock::time_point lastMoveTime;
+    std::chrono::steady_clock::time_point lastItemSpawnTime; // Add this line
 };
 
 #endif // GAME_H

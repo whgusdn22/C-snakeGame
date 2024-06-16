@@ -53,8 +53,9 @@ SnakeGame::SnakeGame()
       gateManager(gameMap),
       snake(gateManager), // Initialize snake with gateManager
       lastMoveTime(std::chrono::steady_clock::now()),
-      currentStage(1) // Initialize currentStage
-{                     // Initialize lastMoveTime
+      lastItemSpawnTime(std::chrono::steady_clock::now()), // Add item spawn time
+      currentStage(1)                                      // Initialize currentStage
+{
     score = 0;
     maxLength = 0;
     growthCount = 0;
@@ -62,7 +63,7 @@ SnakeGame::SnakeGame()
     gateCount = 0;
     gameOver = false;
     dir = RIGHT;
-    tick = 200; // ms
+    tick = 100; // ms
     Initialize();
 }
 
@@ -83,7 +84,7 @@ void SnakeGame::Initialize()
 
     srand(time(0));
 
-    // Spawn items and gates
+    // Spawn initial items and gates
     itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
     gateManager.SpawnGates(gameMap.getWidth(), gameMap.getHeight());
 }
@@ -266,10 +267,12 @@ void SnakeGame::Logic()
             ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
         }
 
-        // Respawn items if necessary
-        if (itemManager.ItemsDepleted())
+        // Respawn items every 5 seconds
+        auto itemDuration = std::chrono::duration_cast<std::chrono::seconds>(now - lastItemSpawnTime).count();
+        if (itemDuration >= 5)
         {
             itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
+            lastItemSpawnTime = now;
         }
     }
 }
