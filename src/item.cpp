@@ -14,21 +14,21 @@ void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap)
         return cell == ' ';
     };
 
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < 2; ++i)
     {
-        Point growth, poison;
+        Point growth;
         do
         {
             growth = Point(rand() % width, rand() % height);
         } while (!is_valid_position(growth));
         growthItems.push_back(growth);
-
-        do
-        {
-            poison = Point(rand() % width, rand() % height);
-        } while (!is_valid_position(poison));
-        poisonItems.push_back(poison);
     }
+    Point poison;
+    do
+    {
+        poison = Point(rand() % width, rand() % height);
+    } while (!is_valid_position(poison));
+    poisonItems.push_back(poison);
 }
 
 bool ItemManager::IsItem(Point p)
