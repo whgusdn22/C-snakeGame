@@ -150,16 +150,16 @@ void SnakeGame::Input()
     switch (ch)
     {
     case KEY_LEFT:
-            dir = LEFT;
+        dir = LEFT;
         break;
     case KEY_RIGHT:
-            dir = RIGHT;
+        dir = RIGHT;
         break;
     case KEY_UP:
-            dir = UP;
+        dir = UP;
         break;
     case KEY_DOWN:
-            dir = DOWN;
+        dir = DOWN;
         break;
     case 'q':
         gameOver = true;
@@ -202,7 +202,7 @@ void SnakeGame::Logic()
                 score -= 10;
                 poisonCount++;
                 snake.Shrink();
-                if (snake.GetBody().size() < 3)
+                if (snake.GetBody().size() < 4)
                 {
                     gameOver = true;
                 }
