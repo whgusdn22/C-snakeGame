@@ -7,6 +7,7 @@ void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap)
 {
     growthItems.clear();
     poisonItems.clear();
+    speedItems.clear();
 
     auto is_valid_position = [&gameMap](Point p)
     {
@@ -14,21 +15,30 @@ void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap)
         return cell == ' ';
     };
 
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < 3; ++i)
     {
         Point growth;
+        Point poison;
         do
         {
             growth = Point(rand() % width, rand() % height);
         } while (!is_valid_position(growth));
         growthItems.push_back(growth);
+        do
+        {
+            poison = Point(rand() % width, rand() % height);
+        } while (!is_valid_position(poison));
+        poisonItems.push_back(poison);
     }
-    Point poison;
-    do
+    for (int i = 0; i < 2; ++i)
     {
-        poison = Point(rand() % width, rand() % height);
-    } while (!is_valid_position(poison));
-    poisonItems.push_back(poison);
+        Point speed;
+        do
+        {
+            speed = Point(rand() % width, rand() % height);
+        } while (!is_valid_position(speed));
+        speedItems.push_back(speed);
+    }
 }
 
 bool ItemManager::IsItem(Point p)

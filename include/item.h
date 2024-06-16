@@ -5,7 +5,7 @@
 #include "../include/point.h"
 #include "map.h"
 
-class ItemManager 
+class ItemManager
 {
 public:
     void SpawnItems(int width, int height, const GameMap &gameMap);
@@ -18,6 +18,7 @@ public:
 private:
     std::vector<Point> growthItems;
     std::vector<Point> poisonItems;
+    std::vector<Point> speedItems;
 };
 
 #endif // ITEM_H
