@@ -33,9 +33,9 @@ void Snake::Move(Direction dir)
     case DOWN:
         ++body[0].y;
         break;
-    default:
-        ++body[0].x;
-        break;
+        // default:
+        //     ++body[0].x;
+        //     break;
     }
     for (size_t i = 1; i < body.size(); ++i)
     {
@@ -52,12 +52,6 @@ bool Snake::IsCollision(Point p)
         if (body[i].x == p.x && body[i].y == p.y)
             return true;
     }
-    return false;
-}
-
-bool Snake::IsItem(Point p)
-{
-    // Implement item collision logic
     return false;
 }
 
@@ -95,12 +89,14 @@ void Snake::SetHead(Point newHead)
     body[0] = newHead;
 }
 
-void Snake::HandleGate(Direction& dir)
+void Snake::HandleGate(Direction &dir)
 {
-    if (IsGate(GetHead())) {
+    if (IsGate(GetHead()))
+    {
         Point newHead = gateManager.GetOtherGate(GetHead(), dir);
         SetHead(newHead);
-        if (body.size() > 1) {
+        if (body.size() > 1)
+        {
             body[1] = newHead; // 두 번째 몸통을 새 머리 위치로 설정
         }
     }
