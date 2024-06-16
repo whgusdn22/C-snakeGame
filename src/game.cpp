@@ -146,33 +146,19 @@ void SnakeGame::Draw()
 
 void SnakeGame::Input()
 {
-    auto Body = snake.GetBody();
-    Direction nowDir;
-    if (snake.GetHead() + Point(1, 0) == Body[1])
-        nowDir = LEFT;
-    else if (snake.GetHead() + Point(-1, 0) == Body[1])
-        nowDir = RIGHT;
-    else if (snake.GetHead() + Point(0, -1) == Body[1])
-        nowDir = UP;
-    else if (snake.GetHead() + Point(0, 1) != Body[1])
-        nowDir = DOWN;
     int ch = getch();
     switch (ch)
     {
     case KEY_LEFT:
-        if (dir != RIGHT && nowDir != RIGHT)
             dir = LEFT;
         break;
     case KEY_RIGHT:
-        if (dir != LEFT && nowDir != LEFT)
             dir = RIGHT;
         break;
     case KEY_UP:
-        if (dir != DOWN && nowDir != DOWN)
             dir = UP;
         break;
     case KEY_DOWN:
-        if (dir != UP && nowDir != UP)
             dir = DOWN;
         break;
     case 'q':
