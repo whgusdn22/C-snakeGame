@@ -116,11 +116,13 @@ void SnakeGame::Draw()
 
     // Draw Score Board text inside the box
     mvprintw(startY + 1, startX + 2, "Score Board");
-    mvprintw(startY + 2, startX + 2, "B: (%d) / (%d)", snakeBody.size(), maxLength);
-    mvprintw(startY + 3, startX + 2, "+: %d", growthCount);
-    mvprintw(startY + 4, startX + 2, "-: %d", poisonCount);
-    mvprintw(startY + 5, startX + 2, "G: %d", gateCount);
-    mvprintw(startY + 6, startX + 2, "score: %d", score);
+    mvprintw(startY + 2, startX + 2, "score: %d", score);
+    mvprintw(startY + 3, startX + 2, "B: (%d) / (%d)", snakeBody.size(), maxLength);
+    mvprintw(startY + 4, startX + 2, "+: %d", growthCount);
+    mvprintw(startY + 5, startX + 2, "-: %d", poisonCount);
+    mvprintw(startY + 6, startX + 2, "G: %d", gateCount);
+    mvprintw(startY + 7, startX + 2, "tick: %d", tick);
+    
 
     // Draw Mission box
     int missionBoxWidth = 20;
@@ -256,29 +258,23 @@ void SnakeGame::Logic()
             lastItemSpawnTime = now;
         }
     }
-    if (score >= 100 && score != SnakeGame::scores.back())
+    if (score >= 100 && currentStage == 1)
     {
-        SnakeGame::scores.push_back(score);
-        if ((score / 100) % 4 == 1)
-        {
-            SnakeGame::MoveCenter();
-            gameMap.ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
-        }
-        else if ((score / 100) % 4 == 2)
-        {
-            SnakeGame::MoveCenter();
-            gameMap.ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
-        }
-        else if ((score / 100) % 4 == 3)
-        {
-            SnakeGame::MoveCenter();
-            gameMap.ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
-        }
-        else if ((score / 100) % 4 == 0)
-        {
-            SnakeGame::MoveCenter();
-            gameMap.ChangeMap(std::vector<std::string>(std::begin(map1), std::end(map1)));
-        }
+        currentStage = 2;
+        tick -= 20;
+        ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
+    }
+    else if (score >= 200 && currentStage == 2)
+    {
+        currentStage = 3;
+        tick -= 10;
+        ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
+    }
+    else if (score >= 300 && currentStage == 3)
+    {
+        currentStage = 4;
+        tick -= 20;
+        ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
     }
 }
 
