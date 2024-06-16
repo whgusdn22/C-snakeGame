@@ -1,5 +1,4 @@
 #include "../include/game.h"
-#include "../UI/scoreboard.h"
 #include "../include/map/map1.h"
 #include "../include/map/map2.h"
 #include "../include/map/map3.h"
@@ -116,10 +115,11 @@ void SnakeGame::Draw()
 
     // Draw Score Board text inside the box
     mvprintw(startY + 1, startX + 2, "Score Board");
-    mvprintw(startY + 2, startX + 2, "B: (%d) / (%d)", snakeBody.size(), maxLength);
-    mvprintw(startY + 3, startX + 2, "+: %d", growthCount);
-    mvprintw(startY + 4, startX + 2, "-: %d", poisonCount);
-    mvprintw(startY + 5, startX + 2, "G: %d", gateCount);
+    mvprintw(startY + 2, startX + 2, "score: %d", score);
+    mvprintw(startY + 3, startX + 2, "B: (%d) / (%d)", snakeBody.size(), maxLength);
+    mvprintw(startY + 4, startX + 2, "+: %d", growthCount);
+    mvprintw(startY + 5, startX + 2, "-: %d", poisonCount);
+    mvprintw(startY + 6, startX + 2, "G: %d", gateCount);
 
     // Draw Mission box
     int missionBoxWidth = 20;
@@ -255,7 +255,7 @@ void SnakeGame::Logic()
             lastItemSpawnTime = now;
         }
     }
-    if (score % 100 == 0 and score != SnakeGame::scores.back())
+    if (score != SnakeGame::scores.back())
     {
         SnakeGame::scores.push_back(score);
         if ((score / 100) % 4 == 1)
