@@ -34,6 +34,57 @@ bool GateManager::IsGatePosition(Point p) {
     return (p.x == gateA.x && p.y == gateA.y) || (p.x == gateB.x && p.y == gateB.y);
 }
 
+Direction GateManager::GetValidDirection(Point gate, Direction preferredDir) {
+    Point newPos = gate;
+
+    switch (preferredDir) {
+        case UP:    newPos.y--; break;
+        case DOWN:  newPos.y++; break;
+        case LEFT:  newPos.x--; break;
+        case RIGHT: newPos.x++; break;
+        default: break;
+    }
+
+    // Check if preferred direction is valid
+    if (newPos.x >= 0 && newPos.x < gameMap.getWidth() && newPos.y >= 0 && newPos.y < gameMap.getHeight() &&
+        gameMap.GetMap()[newPos.y][newPos.x] != '1') {
+        return preferredDir;
+    }
+
+    // If preferred direction is blocked, find an alternative
+    switch (preferredDir) {
+        case UP:
+            if (gameMap.GetMap()[gate.y][gate.x - 1] != '1') return LEFT;
+            if (gameMap.GetMap()[gate.y][gate.x + 1] != '1') return RIGHT;
+            if (gameMap.GetMap()[gate.y - 1][gate.x] != '1') return UP;
+            if (gameMap.GetMap()[gate.y + 1][gate.x] != '1') return DOWN;
+            break;
+        case DOWN:
+            if (gameMap.GetMap()[gate.y][gate.x - 1] != '1') return LEFT;
+            if (gameMap.GetMap()[gate.y][gate.x + 1] != '1') return RIGHT;
+            if (gameMap.GetMap()[gate.y + 1][gate.x] != '1') return DOWN;
+            if (gameMap.GetMap()[gate.y - 1][gate.x] != '1') return UP;
+            break;
+        case LEFT:
+            if (gameMap.GetMap()[gate.y - 1][gate.x] != '1') return DOWN;
+            if (gameMap.GetMap()[gate.y + 1][gate.x] != '1') return UP;
+            if (gameMap.GetMap()[gate.y][gate.x - 1] != '1') return LEFT;
+            if (gameMap.GetMap()[gate.y][gate.x + 1] != '1') return RIGHT;
+            break;
+        case RIGHT:
+            if (gameMap.GetMap()[gate.y - 1][gate.x] != '1') return UP;
+            if (gameMap.GetMap()[gate.y + 1][gate.x] != '1') return DOWN;
+            if (gameMap.GetMap()[gate.y][gate.x + 1] != '1') return RIGHT;
+            if (gameMap.GetMap()[gate.y][gate.x - 1] != '1') return LEFT;
+            break;
+        default:
+            break;
+    }
+
+    // Default to preferred direction if no alternatives
+    return preferredDir;
+}
+
 Point GateManager::GetOtherGate(Point p, Direction& newDir) {
     Point otherGate = (p.x == gateA.x && p.y == gateA.y) ? gateB : gateA;
 
@@ -42,39 +93,26 @@ Point GateManager::GetOtherGate(Point p, Direction& newDir) {
 
     // 게이트 위치와 현재 방향에 따라 새로운 방향 설정
     if (otherGate.y == 0) { // 나오는 게이트가 최상단에 있을 경우
-        newDir = DOWN;
+        newDir = GetValidDirection(otherGate, DOWN);
     } else if (otherGate.y == mapHeight - 1) { // 나오는 게이트가 최하단에 있을 경우
-        newDir = UP;
+        newDir = GetValidDirection(otherGate, UP);
     } else if (otherGate.x == 0) { // 나오는 게이트가 가장 왼쪽에 있을 경우
-        newDir = RIGHT;
+        newDir = GetValidDirection(otherGate, RIGHT);
     } else if (otherGate.x == mapWidth - 1) { // 나오는 게이트가 가장 오른쪽에 있을 경우
-        newDir = LEFT;
-    } else if (gateA.y == gateB.y) { // 게이트가 같은 y 좌표에 있을 경우
-        if (p.x < otherGate.x) {
-            newDir = RIGHT;
+        newDir = GetValidDirection(otherGate, LEFT);
+    } else { // 일반적인 경우
+        // 진출 가능 방향이 좌우일 때
+        
+        if (newDir == UP) {
+            newDir = GetValidDirection(otherGate, RIGHT);
+        } else if (newDir == LEFT) {
+            newDir = GetValidDirection(otherGate, LEFT);
+        } else if (newDir == RIGHT) {
+            newDir = GetValidDirection(otherGate, RIGHT);
         } else {
-            newDir = LEFT;
-        }
-    } else if (gateA.x == gateB.x) { // 게이트가 같은 x 좌표에 있을 경우
-        if (p.y < otherGate.y) {
-            newDir = DOWN;
-        } else {
-            newDir = UP;
-        }
-    } else { // 게이트가 서로 다른 x, y 좌표에 있을 경우
-        if (abs(p.x - otherGate.x) > abs(p.y - otherGate.y)) {
-            if (p.x < otherGate.x) {
-                newDir = RIGHT;
-            } else {
-                newDir = LEFT;
-            }
-        } else {
-            if (p.y < otherGate.y) {
-                newDir = DOWN;
-            } else {
-                newDir = UP;
-            }
-        }
+            newDir = GetValidDirection(otherGate, DOWN);
+        } 
+        
     }
 
     return otherGate;

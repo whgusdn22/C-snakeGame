@@ -12,6 +12,7 @@ public:
     bool IsGate(Point p);
     bool IsGatePosition(Point p); // 추가
     Point GetOtherGate(Point p, Direction& newDir);
+    Direction GetValidDirection(Point gate, Direction preferredDir); // 추가
     void Draw();
     Point gateA;
     Point gateB;
