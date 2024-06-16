@@ -120,6 +120,7 @@ void SnakeGame::Draw()
     mvprintw(startY + 3, startX + 2, "+: %d", growthCount);
     mvprintw(startY + 4, startX + 2, "-: %d", poisonCount);
     mvprintw(startY + 5, startX + 2, "G: %d", gateCount);
+    mvprintw(startY + 6, startX + 2, "score: %d", score);
 
     // Draw Mission box
     int missionBoxWidth = 20;
@@ -255,36 +256,28 @@ void SnakeGame::Logic()
             lastItemSpawnTime = now;
         }
     }
-    if (score % 100 == 0 and score != SnakeGame::scores.back())
+    if (score >= 100 && score != SnakeGame::scores.back())
     {
         SnakeGame::scores.push_back(score);
         if ((score / 100) % 4 == 1)
         {
             SnakeGame::MoveCenter();
             gameMap.ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
-            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
-            lastItemSpawnTime = std::chrono::steady_clock::now();
         }
         else if ((score / 100) % 4 == 2)
         {
             SnakeGame::MoveCenter();
             gameMap.ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
-            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
-            lastItemSpawnTime = std::chrono::steady_clock::now();
         }
         else if ((score / 100) % 4 == 3)
         {
             SnakeGame::MoveCenter();
             gameMap.ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
-            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
-            lastItemSpawnTime = std::chrono::steady_clock::now();
         }
         else if ((score / 100) % 4 == 0)
         {
             SnakeGame::MoveCenter();
             gameMap.ChangeMap(std::vector<std::string>(std::begin(map1), std::end(map1)));
-            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
-            lastItemSpawnTime = std::chrono::steady_clock::now();
         }
     }
 }
