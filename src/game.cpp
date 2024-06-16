@@ -247,29 +247,10 @@ void SnakeGame::Logic()
             return;
         }
 
-        // Change map based on score
-        if (score >= 100 && currentStage == 1)
-        {
-            currentStage = 2;
-            tick -= 20;
-            ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
-        }
-        else if (score >= 200 && currentStage == 2)
-        {
-            currentStage = 3;
-            tick -= 10;
-            ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
-        }
-        else if (score >= 300 && currentStage == 3)
-        {
-            currentStage = 4;
-            tick -= 20;
-            ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
-        }
 
-        // Respawn items every 5 seconds
+        // Respawn items every 6seconds
         auto itemDuration = std::chrono::duration_cast<std::chrono::seconds>(now - lastItemSpawnTime).count();
-        if (itemDuration >= 5)
+        if (itemDuration >= 6)
         {
             itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
             lastItemSpawnTime = now;
