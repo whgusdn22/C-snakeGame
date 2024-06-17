@@ -98,6 +98,14 @@ void ItemManager::RemoveItem(Point p)
             return;
         }
     }
+    for (auto it = speedItems.begin(); it != speedItems.end(); ++it)
+    {
+        if (it->x == p.x && it->y == p.y)
+        {
+            speedItems.erase(it);
+            return;
+        }
+    }
 }
 
 void ItemManager::Draw()

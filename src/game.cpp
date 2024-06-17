@@ -202,14 +202,14 @@ void SnakeGame::Logic()
             }
             else if (itemManager.IsSpeedItem(snake.GetHead()))
             {
-                tick -= 40;
-                // if (tick > 50)
-                // {
-                //     score += 5;
-                //     tick -= 10;
-                // }
-                // else
-                //     score += 10;
+                if (tick > 50)
+                {
+                    score += 5;
+                    tick -= 15;
+                }
+                else
+                    score += 10;
+                timeout(tick); // Update timeout when tick changes
             }
             else
             {
@@ -260,7 +260,7 @@ void SnakeGame::Logic()
             return;
         }
 
-        // Respawn items every 6seconds
+        // Respawn items every 6 seconds
         auto itemDuration = std::chrono::duration_cast<std::chrono::seconds>(now - lastItemSpawnTime).count();
         if (itemDuration >= 6)
         {
@@ -271,19 +271,25 @@ void SnakeGame::Logic()
     if (score >= 100 && currentStage == 1)
     {
         currentStage = 2;
-        tick -= 20;
+        if (tick > 50)
+            tick -= 20;
+        timeout(tick); // Update timeout when tick changes
         ChangeMap(std::vector<std::string>(std::begin(map2), std::end(map2)));
     }
     else if (score >= 200 && currentStage == 2)
     {
         currentStage = 3;
-        tick -= 10;
+        if (tick > 50)
+            tick -= 10;
+        timeout(tick); // Update timeout when tick changes
         ChangeMap(std::vector<std::string>(std::begin(map3), std::end(map3)));
     }
     else if (score >= 300 && currentStage == 3)
     {
         currentStage = 4;
-        tick -= 20;
+        if (tick > 50)
+            tick -= 10;
+        timeout(tick); // Update timeout when tick changes
         ChangeMap(std::vector<std::string>(std::begin(map4), std::end(map4)));
     }
 }
