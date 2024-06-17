@@ -2,17 +2,23 @@
 #include <cstdlib>
 #include <curses.h>
 #include "map.h"
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
-void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap)
+void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap, vector<Point> snakeBody)
 {
     growthItems.clear();
     poisonItems.clear();
     speedItems.clear();
 
-    auto is_valid_position = [&gameMap](Point p)
+    auto is_valid_position = [&gameMap](Point p, vector<Point> snakeBody)
     {
         char cell = gameMap.GetMap()[p.y][p.x];
-        return cell == ' ';
+        if (std::find(snakeBody.begin(), snakeBody.end(), Point(p.x, p.y)) != snakeBody.end())
+            return cell == ' ';
+        else
+            return false;
     };
 
     for (int i = 0; i < 3; ++i)
@@ -22,12 +28,12 @@ void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap)
         do
         {
             growth = Point(rand() % width, rand() % height);
-        } while (!is_valid_position(growth));
+        } while (is_valid_position(growth, snakeBody));
         growthItems.push_back(growth);
         do
         {
             poison = Point(rand() % width, rand() % height);
-        } while (!is_valid_position(poison));
+        } while (is_valid_position(poison, snakeBody));
         poisonItems.push_back(poison);
     }
     for (int i = 0; i < 2; ++i)
@@ -36,7 +42,7 @@ void ItemManager::SpawnItems(int width, int height, const GameMap &gameMap)
         do
         {
             speed = Point(rand() % width, rand() % height);
-        } while (!is_valid_position(speed));
+        } while (is_valid_position(speed, snakeBody));
         speedItems.push_back(speed);
     }
 }
