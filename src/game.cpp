@@ -201,7 +201,7 @@ void SnakeGame::Logic()
         {
             if (itemManager.IsGrowthItem(snake.GetHead()))
             {
-                score += 100;
+                score += 20;
                 growthCount++;
                 Point tail = snake.body.back();
                 Point before_tail = *(&snake.body.back() - 1);
@@ -280,7 +280,7 @@ void SnakeGame::Logic()
 
         // Respawn items every 6 seconds
         auto itemDuration = std::chrono::duration_cast<std::chrono::seconds>(now - lastItemSpawnTime).count();
-        if (itemDuration >= 3)
+        if (itemDuration >= 6)
         {
             itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap, snake.body);
             lastItemSpawnTime = now;

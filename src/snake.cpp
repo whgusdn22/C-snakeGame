@@ -9,7 +9,7 @@ using namespace std;
 Snake::Snake(GateManager &gateManager) : gateManager(gateManager)
 {
     body.push_back(Point(30, 11));
-    for (int i = 1; i < 35; ++i)
+    for (int i = 1; i < 4; ++i)
     {
         body.push_back(Point(30 - i, 11));
     }
