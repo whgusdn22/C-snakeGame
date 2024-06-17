@@ -68,10 +68,7 @@ void Snake::Grow()
 
 void Snake::Shrink()
 {
-    if (body.size() > 1)
-    {
-        body.pop_back();
-    }
+    body.pop_back();
 }
 
 Point Snake::GetHead() const

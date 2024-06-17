@@ -63,7 +63,7 @@ SnakeGame::SnakeGame()
     gateCount = 0;
     gameOver = false;
     dir = RIGHT;
-    tick = 100; // ms
+    tick = -1; // ms
     Initialize();
 }
 
@@ -199,6 +199,7 @@ void SnakeGame::Logic()
                 score += 50;
                 growthCount++;
                 snake.Grow();
+                //timeout(tick);
             }
             else if (itemManager.IsSpeedItem(snake.GetHead()))
             {
@@ -216,6 +217,7 @@ void SnakeGame::Logic()
                 score -= 10;
                 poisonCount++;
                 snake.Shrink();
+                //timeout(tick);
                 if (snake.GetBody().size() < 4)
                 {
                     gameOver = true;
