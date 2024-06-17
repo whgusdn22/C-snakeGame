@@ -196,10 +196,20 @@ void SnakeGame::Logic()
         {
             if (itemManager.IsGrowthItem(snake.GetHead()))
             {
-                score += 50;
+                score += 20;
                 growthCount++;
-                snake.Grow();
-                //timeout(tick);
+                Point tail = snake.body.back();
+                Point before_tail = *(&snake.body.back() - 1);
+                if (before_tail + Point(1, 0) == tail)
+                    snake.body.push_back(tail + Point(1, 0));
+                else if (before_tail + Point(-1, 0) == tail)
+                    snake.body.push_back(tail + Point(-1, 0));
+                else if (before_tail + Point(0, 1) == tail)
+                    snake.body.push_back(tail + Point(1, 0));
+                else if (before_tail + Point(0, -1) == tail)
+                    snake.body.push_back(tail + Point(-1, 0));
+                Draw();
+                // timeout(tick);
             }
             else if (itemManager.IsSpeedItem(snake.GetHead()))
             {
@@ -217,7 +227,7 @@ void SnakeGame::Logic()
                 score -= 10;
                 poisonCount++;
                 snake.Shrink();
-                //timeout(tick);
+                // timeout(tick);
                 if (snake.GetBody().size() < 4)
                 {
                     gameOver = true;
