@@ -86,7 +86,7 @@ void SnakeGame::Initialize()
     srand(time(0));
 
     // Spawn initial items and gates
-    itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
+    itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap, snake.body);
     gateManager.SpawnGates(gameMap.getWidth(), gameMap.getHeight());
 }
 
@@ -201,7 +201,7 @@ void SnakeGame::Logic()
         {
             if (itemManager.IsGrowthItem(snake.GetHead()))
             {
-                score += 20;
+                score += 100;
                 growthCount++;
                 Point tail = snake.body.back();
                 Point before_tail = *(&snake.body.back() - 1);
@@ -272,6 +272,7 @@ void SnakeGame::Logic()
         {
             mvprintw(gameMap.getHeight() / 2, (gameMap.getWidth() - 3) / 2, "Win");
             refresh();
+            getchar();
             getch();
             gameOver = true;
             return;
@@ -279,9 +280,9 @@ void SnakeGame::Logic()
 
         // Respawn items every 6 seconds
         auto itemDuration = std::chrono::duration_cast<std::chrono::seconds>(now - lastItemSpawnTime).count();
-        if (itemDuration >= 6)
+        if (itemDuration >= 3)
         {
-            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
+            itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap, snake.body);
             lastItemSpawnTime = now;
         }
     }
@@ -314,7 +315,7 @@ void SnakeGame::Logic()
 void SnakeGame::ChangeMap(const std::vector<std::string> &newMap)
 {
     gameMap.ChangeMap(newMap);
-    itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
+    itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap, snake.body);
     gateManager.SpawnGates(gameMap.getWidth(), gameMap.getHeight());
     MoveCenter();
 }

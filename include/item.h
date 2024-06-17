@@ -4,11 +4,12 @@
 #include <vector>
 #include "../include/point.h"
 #include "map.h"
+using namespace std;
 
 class ItemManager
 {
 public:
-    void SpawnItems(int width, int height, const GameMap &gameMap);
+    void SpawnItems(int width, int height, const GameMap &gameMap, vector<Point>);
     bool IsItem(Point p);
     bool IsGrowthItem(Point p);
     bool IsSpeedItem(Point p);
