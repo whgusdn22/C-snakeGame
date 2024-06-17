@@ -281,6 +281,7 @@ void SnakeGame::Logic()
         auto itemDuration = std::chrono::duration_cast<std::chrono::seconds>(now - lastItemSpawnTime).count();
         if (itemDuration >= 6)
         {
+            Draw();
             itemManager.SpawnItems(gameMap.getWidth(), gameMap.getHeight(), gameMap);
             lastItemSpawnTime = now;
         }
