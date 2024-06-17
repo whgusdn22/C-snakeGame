@@ -79,6 +79,15 @@ bool ItemManager::IsSpeedItem(Point p)
     }
     return false;
 }
+bool ItemManager::IsPoisonItem(Point p)
+{
+    for (const auto &item : poisonItems)
+    {
+        if (item.x == p.x && item.y == p.y)
+            return true;
+    }
+    return false;
+}
 
 void ItemManager::RemoveItem(Point p)
 {
