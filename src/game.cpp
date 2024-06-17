@@ -199,13 +199,14 @@ void SnakeGame::Logic()
                 score += 20;
                 growthCount++;
                 Point tail = snake.body.back();
-                if (dir == LEFT)
+                Point before_tail = *(&snake.body.back() - 1);
+                if (before_tail + Point(1, 0) == tail)
                     snake.body.push_back(tail + Point(1, 0));
-                else if (dir == RIGHT)
+                else if (before_tail + Point(-1, 0) == tail)
                     snake.body.push_back(tail + Point(-1, 0));
-                else if (dir == UP)
+                else if (before_tail + Point(0, 1) == tail)
                     snake.body.push_back(tail + Point(1, 0));
-                else if (dir == DOWN)
+                else if (before_tail + Point(0, -1) == tail)
                     snake.body.push_back(tail + Point(-1, 0));
                 Draw();
                 // timeout(tick);
