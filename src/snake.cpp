@@ -3,7 +3,6 @@
 #include "../include/game.h"
 #include "../include/direction.h"
 #include "../include/gate.h"
-#include "snake.h"
 
 using namespace std;
 
@@ -17,7 +16,7 @@ Snake::Snake(GateManager &gateManager) : gateManager(gateManager)
 }
 
 void Snake::Move(Direction dir)
-{
+{ // Use Direction from direction.h
     Point prev = body[0];
     Point prev2;
     switch (dir)
@@ -34,8 +33,10 @@ void Snake::Move(Direction dir)
     case DOWN:
         ++body[0].y;
         break;
+        // default:
+        //     ++body[0].x;
+        //     break;
     }
-
     for (size_t i = 1; i < body.size(); ++i)
     {
         prev2 = body[i];
@@ -60,11 +61,9 @@ bool Snake::IsGate(Point p)
            (p.x == gateManager.gateB.x && p.y == gateManager.gateB.y);
 }
 
-void Snake::Grow(vector<Point> &p)
+void Snake::Grow()
 {
-    // Add a new segment at the position of the last segment
-    p.push_back(Point());
-    p.back() = (p.back() + Point(1, 0));
+    body.push_back(Point());
 }
 
 void Snake::Shrink()
@@ -77,7 +76,7 @@ Point Snake::GetHead() const
     return body[0];
 }
 
-const std::vector<Point> &Snake::GetBody()
+const std::vector<Point> &Snake::GetBody() const
 {
     return body;
 }

@@ -95,7 +95,7 @@ void SnakeGame::Draw()
     gameMap.Draw();
     itemManager.Draw();
     gateManager.Draw();
-    auto &snakeBody = snake.GetBody();
+    const auto &snakeBody = snake.GetBody();
     for (size_t i = 0; i < snakeBody.size(); ++i)
     {
         mvprintw(snakeBody[i].y + 1, snakeBody[i].x + 1, i == 0 ? "@" : "o");
@@ -198,9 +198,8 @@ void SnakeGame::Logic()
             {
                 score += 50;
                 growthCount++;
-                vector<Point> snakeBody2 = snake.GetBody();
-                snake.Grow(snakeBody2);
-                // timeout(tick);
+                snake.Grow();
+                //timeout(tick);
             }
             else if (itemManager.IsSpeedItem(snake.GetHead()))
             {
@@ -218,7 +217,7 @@ void SnakeGame::Logic()
                 score -= 10;
                 poisonCount++;
                 snake.Shrink();
-                // timeout(tick);
+                //timeout(tick);
                 if (snake.GetBody().size() < 4)
                 {
                     gameOver = true;

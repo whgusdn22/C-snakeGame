@@ -1,10 +1,12 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
-#include "point.h"
-#include "direction.h"
-#include "gate.h"
 #include <vector>
+#include "../include/point.h"
+#include "../include/direction.h"
+#include "../include/gate.h"
+
+using namespace std;
 
 class Snake
 {
@@ -12,15 +14,18 @@ public:
     Snake(GateManager &gateManager);
     void Move(Direction dir);
     bool IsCollision(Point p);
+    bool IsItem(Point p);
     bool IsGate(Point p);
-    void Grow(vector<Point> &p);
+    void Grow();
     void Shrink();
     Point GetHead() const;
-    const std::vector<Point> &GetBody();
+    const vector<Point> &GetBody() const;
     void SetHead(Point newHead);
-    void HandleGate(Direction &dir);
-    std::vector<Point> body;
+    void HandleGate(Direction& dir);
+
+    vector<Point> body;
     GateManager &gateManager;
+    bool growth = false;
 };
 
-#endif // SNAKE_H
+#endif
