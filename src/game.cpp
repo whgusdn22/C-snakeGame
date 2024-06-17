@@ -54,6 +54,7 @@ SnakeGame::SnakeGame()
       snake(gateManager), // Initialize snake with gateManager
       lastMoveTime(std::chrono::steady_clock::now()),
       lastItemSpawnTime(std::chrono::steady_clock::now()), // Add item spawn time
+      startTime(std::chrono::steady_clock::now()),         // Initialize startTime
       currentStage(1)                                      // Initialize currentStage
 {
     score = 0;
@@ -63,7 +64,7 @@ SnakeGame::SnakeGame()
     gateCount = 0;
     gameOver = false;
     dir = RIGHT;
-    tick = -1; // ms
+    tick = 150; // ms
     Initialize();
 }
 
@@ -102,7 +103,7 @@ void SnakeGame::Draw()
     itemManager.Draw();
     // Draw Score Board box
     int boxWidth = 20;
-    int boxHeight = 8;
+    int boxHeight = 9; // Increase the height to fit the time display
     int startX = gameMap.getWidth() + 2;
     int startY = 1;
     mvprintw(startY, startX, "+------------------+");
@@ -113,6 +114,10 @@ void SnakeGame::Draw()
     }
     mvprintw(startY + boxHeight + 1, startX, "+------------------+");
 
+    // Calculate the elapsed time
+    auto now = std::chrono::steady_clock::now();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::seconds>(now - startTime).count();
+
     // Draw Score Board text inside the box
     mvprintw(startY + 1, startX + 2, "Score Board");
     mvprintw(startY + 2, startX + 2, "score: %d", score);
@@ -121,6 +126,7 @@ void SnakeGame::Draw()
     mvprintw(startY + 5, startX + 2, "-: %d", poisonCount);
     mvprintw(startY + 6, startX + 2, "G: %d", gateCount);
     mvprintw(startY + 7, startX + 2, "tick: %d", tick);
+    mvprintw(startY + 8, startX + 2, "Time: %lds", elapsedTime);
 
     // Draw Mission box
     int missionBoxWidth = 20;
