@@ -122,7 +122,6 @@ void SnakeGame::Draw()
     mvprintw(startY + 5, startX + 2, "-: %d", poisonCount);
     mvprintw(startY + 6, startX + 2, "G: %d", gateCount);
     mvprintw(startY + 7, startX + 2, "tick: %d", tick);
-    
 
     // Draw Mission box
     int missionBoxWidth = 20;
@@ -200,6 +199,17 @@ void SnakeGame::Logic()
                 score += 50;
                 growthCount++;
                 snake.Grow();
+            }
+            else if (itemManager.IsSpeedItem(snake.GetHead()))
+            {
+                tick -= 40;
+                // if (tick > 50)
+                // {
+                //     score += 5;
+                //     tick -= 10;
+                // }
+                // else
+                //     score += 10;
             }
             else
             {

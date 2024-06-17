@@ -53,12 +53,26 @@ bool ItemManager::IsItem(Point p)
         if (item.x == p.x && item.y == p.y)
             return true;
     }
+    for (const auto &item : speedItems)
+    {
+        if (item.x == p.x && item.y == p.y)
+            return true;
+    }
     return false;
 }
 
 bool ItemManager::IsGrowthItem(Point p)
 {
     for (const auto &item : growthItems)
+    {
+        if (item.x == p.x && item.y == p.y)
+            return true;
+    }
+    return false;
+}
+bool ItemManager::IsSpeedItem(Point p)
+{
+    for (const auto &item : speedItems)
     {
         if (item.x == p.x && item.y == p.y)
             return true;
@@ -96,9 +110,13 @@ void ItemManager::Draw()
     {
         mvprintw(item.y + 1, item.x + 1, "P");
     }
+    for (const auto &item : speedItems)
+    {
+        mvprintw(item.y + 1, item.x + 1, "S");
+    }
 }
 
-bool ItemManager::ItemsDepleted()
-{
-    return growthItems.empty() || poisonItems.empty();
-}
+// bool ItemManager::ItemsDepleted()
+// {
+//     return growthItems.empty() || poisonItems.empty();
+// }
