@@ -23,7 +23,7 @@ private:
     void Input();
     void Logic();
     void MoveCenter();
-    void ChangeMap(const std::vector<std::string>& newMap);
+    void ChangeMap(const std::vector<std::string> &newMap);
     bool CheckMissionComplete();
 
     Snake snake;
@@ -40,7 +40,8 @@ private:
     int tick;
     int currentStage;
     std::chrono::steady_clock::time_point lastMoveTime;
-    std::chrono::steady_clock::time_point lastItemSpawnTime; // Add this line
+    std::chrono::steady_clock::time_point lastItemSpawnTime;
+    std::chrono::steady_clock::time_point startTime;
 };
 
 #endif // GAME_H
