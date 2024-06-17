@@ -93,14 +93,13 @@ void SnakeGame::Draw()
 {
     clear();
     gameMap.Draw();
-    itemManager.Draw();
     gateManager.Draw();
     const auto &snakeBody = snake.GetBody();
     for (size_t i = 0; i < snakeBody.size(); ++i)
     {
         mvprintw(snakeBody[i].y + 1, snakeBody[i].x + 1, i == 0 ? "@" : "o");
     }
-
+    itemManager.Draw();
     // Draw Score Board box
     int boxWidth = 20;
     int boxHeight = 8;
